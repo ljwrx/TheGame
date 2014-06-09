@@ -90,7 +90,7 @@ void VectorManager::pushToAttackList(BaseActionSprite* bs)
 		_attackList.pushBack(bs);
 }
 
-void VectorManager::removeFromPartList(ParticalCircle* pc)
+void VectorManager::removeFromPartList(Sprite* pc)
 {
 	if (!pc)
 		CCLOG("error in removeFromPartList(VectorManager):pc is nullptr");
@@ -110,13 +110,35 @@ void VectorManager::onExit(void)
 
 void VectorManager::_checkPartList()
 {
+	bool isHit = false;
+	Sprite* node = nullptr;
+	auto itor = _particalList.begin();
+	while (itor != _particalList.end())
+	{
+		isHit = false;
+		node = *itor;
+		for (auto child : _cList)
+		{
+			if (node->getBoundingBox().intersectsRect(child->getBoundingBox()))
+			{
+				isHit = true;
+				_particalSystem->particalHit(nullptr, 1, node);
+				break;
+			}
+		}
+		if (isHit)
+			continue;
+//		for (auto child : _iList)
+//		{
 
+//		}
+	}
 }
 
 void VectorManager::_checkWaitList()
 {
 	auto itor = _waitList.begin();
-	Vector<BaseActionSprite*>* checkList = nullptr;
+	Vector<BaseActionSprite*>* checkList;
 	while (itor != _waitList.end())
 	{
 		Rect rect = (*itor)->getBoundingBox();
@@ -189,7 +211,7 @@ void VectorManager::_checkAttackList()
 			if (_particalSystem)
 			{
 				BaseData data = _pDataList.at(node->getDataIndex());
-				_particalSystem->particalFire(data.getAttackStyle(), node->getPosition(), Point(0, 1.0f), data.getAttackForce());
+				_particalList.pushBack(_particalSystem->particalFire(data.getAttackStyle(), node->getPosition(), Point(0, 1.0f), data.getAttackForce()));
 			}
 		}
 		else if (node->getKind() & BaseActionSpriteKind::Enemy)

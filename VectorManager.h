@@ -20,7 +20,7 @@ public:
 	
 	void pushToWaitList(BaseActionSprite* bs);
 	void pushToAttackList(BaseActionSprite* bs);
-	void removeFromPartList(ParticalCircle* pc);
+	void removeFromPartList(Sprite* pc);
 
 
 	BaseActionSprite* createCPUByIndex(int index);
@@ -45,7 +45,7 @@ private:
 
 	cocos2d::Vector<BaseActionSprite*> _waitList;
 	cocos2d::Vector<BaseActionSprite*> _attackList;
-	cocos2d::Vector<ParticalCircle*> _particalList;
+	cocos2d::Vector<cocos2d::Sprite*> _particalList;
 
 	cocos2d::Vector<cocos2d::Sprite*> _iList;
 	cocos2d::Vector<BaseActionSprite*> _pList;
